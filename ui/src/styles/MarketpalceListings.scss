@@ -6,11 +6,17 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 1.2rem;
+
 }
 
 .real-estate-card {
   @apply w-[250px];
   display: flex;
+
+  &:hover {
+    cursor: pointer;
+    background-color: rgb(83, 83, 83);
+  }
 }
 
 .real-estate-card__header {

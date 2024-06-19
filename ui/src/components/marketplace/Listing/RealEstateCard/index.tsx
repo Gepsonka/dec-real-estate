@@ -12,6 +12,11 @@ import { Home } from "lucide-react";
 import { Image } from "@nextui-org/react";
 
 export const RealEstateCard = (props: RealEstateCardProps) => {
+  const handleCardClick = () => {
+    console.log("Card clicked");
+    props.onClick();
+  };
+
   const renderImage = () => {
     if (props.imageUrl) {
       return <Image alt="Real Estate Index" width={300} src={props.imageUrl} />;
@@ -30,12 +35,14 @@ export const RealEstateCard = (props: RealEstateCardProps) => {
   };
 
   return (
-    <Card className="real-estate-card">
+    <Card className="real-estate-card" onClick={handleCardClick}>
       <CardHeader className="real-estate-card__header">
         {renderImage()}
       </CardHeader>
       <CardBody className="real-estate-card__body">
-        <h3 className="card_title">{props.title}</h3>
+        <h3 onClick={handleCardClick} className="card_title">
+          {props.title}
+        </h3>
         <p>Price per token: {props.pricePerToken} ETH</p>
         <p>Creator: {props.creator}</p>
       </CardBody>

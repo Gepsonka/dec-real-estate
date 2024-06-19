@@ -3,11 +3,16 @@ import { testRealEstates } from "./constants";
 import { RealEstateCard } from "./RealEstateCard";
 import { ListingProps } from "./types";
 import { RealEstate } from "@/utils/db/RealEstateCollection/types";
+import { useRouter } from "next/router";
+import { WithId } from "mongodb";
+import { clientURLs } from "@/utils";
 
 export const Listing = (props: ListingProps) => {
+  const router = useRouter();
+
   const renderRealEstateCards = () => {
     if (!props.realEstates) return;
-    return props.realEstates.map((realEstate: RealEstate) => {
+    return props.realEstates.map((realEstate: WithId<RealEstate>) => {
       return (
         <RealEstateCard
           key={realEstate.title}
@@ -15,7 +20,11 @@ export const Listing = (props: ListingProps) => {
           pricePerToken={realEstate.tokenPrice}
           tokenSupply={realEstate.totalTokenSUpply}
           currentSupply={realEstate.totalTokenSUpply}
-          onClick={() => {}}
+          onClick={() => {
+            router.push(
+              clientURLs.realEstate_instance(realEstate._id.toString())
+            );
+          }}
           creator={realEstate.creator.toString()}
         />
       );

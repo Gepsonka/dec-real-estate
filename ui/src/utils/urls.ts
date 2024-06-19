@@ -7,10 +7,12 @@ export const clientURLs = {
   marketplace: "/marketplace",
   marketplace_createListing: "/marketplace/create",
   marketplace_assets: "/marketplace/assets",
+  realEstate_instance: (id: string) => `/marketplace/${id}`,
 };
 
 export const serverURLs = {
   abi_resolveAbi: (name: string) => `/abi/${name}`,
   realEstate: "/realEstate",
   realEstate_assets: (address: string) => `/realEstate/${address}`,
+  realEstate_instance: (id: string) => `/realEstate/${id}`,
 };
