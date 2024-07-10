@@ -15,9 +15,19 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
         uint256 listingPrice;
     }
 
+    struct TokenOnSale {
+        Token token;
+        address beingSoldBy;
+        uint256 pricePerToken;
+        uint256 amount;
+        uint256 createdAt;
+    }
+
     event TokenCreated(uint256 indexed tokenId);
 
     mapping(uint256 => Token) private tokens;
+
+    mapping(address => TokenOnSale) private tokensOnSale;
 
     constructor(
         address initialOwner
@@ -56,6 +66,16 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
         safeTransferFrom(tokenOwner, msg.sender, tokenId, numOfTokens, "");
 
         tokenOwner.transfer(msg.value);
+    }
+
+    function getAllBuyableTokens() public view returns (Token[] memory) {
+        Token[] memory buyableTokens = new Token[](currentTokenId);
+        // not efficient but works for now
+        for (uint256 i = 1; i < currentTokenId; i++) {
+            buyableTokens[i] = tokens[i];
+        }
+
+        return buyableTokens;
     }
 
     receive() external payable {}

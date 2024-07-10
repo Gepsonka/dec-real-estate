@@ -22,9 +22,10 @@ export default function Marketplace() {
         signer: wallet.signer!,
         abi: abi.data,
       },
-      realEstate.data?.owner,
+      realEstate.data?.creator as string,
       parseInt(realEstate.data?.tokenId!),
-      numOfTokensToBuy
+      numOfTokensToBuy,
+      realEstate.data!.tokenPrice
     );
 
     console.log(rx);
