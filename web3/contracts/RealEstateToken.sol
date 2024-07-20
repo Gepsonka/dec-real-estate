@@ -12,7 +12,7 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
     struct Token {
         uint256 tokenId;
         uint256 supply;
-        uint256 listingPrice;
+        uint256 baseListingPrice;
     }
 
     struct TokenOnSale {
@@ -23,11 +23,16 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
         uint256 createdAt;
     }
 
+    struct TokenWithOwner {
+        address owner;
+        uint256 tokenId;
+    }
+
     event TokenCreated(uint256 indexed tokenId);
 
     mapping(uint256 => Token) private tokens;
 
-    mapping(address => TokenOnSale) private tokensOnSale;
+    mapping(TokenWithOwner => TokenOnSale) private tokensOnSale;
 
     constructor(
         address initialOwner
@@ -58,7 +63,7 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
         uint256 numOfTokens
     ) public payable {
         require(
-            tokens[tokenId].listingPrice * numOfTokens >= msg.value,
+            tokens[tokenId].baseListingPrice * numOfTokens >= msg.value,
             "Prices do not match"
         );
         require(tokenOwner != msg.sender, "User cannot buy his own tokens");
@@ -76,6 +81,23 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
         }
 
         return buyableTokens;
+    }
+
+    function makeTokenBuyable(
+        uint256 tokenId,
+        uint256 pricePerToken,
+        uint256 amountOfTokens
+    ) public {
+        TokenWithOwner memory tokenWithOwner = TokenWithOwner(
+            msg.sender,
+            tokenId
+        );
+
+        require(
+            balanceOf(msg.sender, tokenId) >= amountOfTokens,
+            "Not enough tokens to sell"
+        );
+        require(tokensOnSale[tokenWithOwner] != 0, "Token is already on sale");
     }
 
     receive() external payable {}
