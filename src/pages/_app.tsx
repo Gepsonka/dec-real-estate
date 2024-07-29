@@ -2,15 +2,16 @@ import { Layout } from "@/components/Layout";
 import { ThemeContext } from "@/contexts";
 import { ThemeContextType } from "@/contexts/ThemeContext/types";
 import "@/styles/globals.scss";
-import { startOrbitDB, connectOrbitDatabase } from "@/utils/db";
+import { startOrbitDB, connectOrbitDatabase, stopOrbitDB } from "@/utils/db";
 import { MetaMaskProvider } from "@metamask/sdk-react";
 import { NextUIProvider } from "@nextui-org/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
-import { create } from "domain";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import orbitdbAddress from "@/utils/db/orbitDBAdress.json";
+import { useDbStore } from "@/stores";
 
 // TODO: change this, ugly as hell
 axios.defaults.baseURL = "http://localhost:3000/api";
@@ -22,13 +23,23 @@ const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
   const [theme, setTheme] = useState<ThemeContextType["theme"]>("light");
+  const dbStore = useDbStore();
 
   const createDB = async () => {
-    const db = await connectOrbitDatabase({
-      dbName: "realEstates",
-      type: "document",
+    console.log("addess: ", orbitdbAddress.RealEstate.address);
+
+    const { db, orbitdb } = await connectOrbitDatabase({
+      address: orbitdbAddress.RealEstate.address,
+      // dbName: "RealEstate",
+      // type: "documents",
+      // indexedDB: "tokenId",
     });
     console.log("DB: ", db);
+
+    dbStore.setDb(db);
+    dbStore.setDbInstance(orbitdb);
+
+    //await stopOrbitDB(orbitdb);
   };
 
   useEffect(() => {

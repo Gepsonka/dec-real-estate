@@ -1,7 +1,7 @@
 import { Libp2p2Options } from "@/config/libp2p";
 import { createLibp2p } from "libp2p";
 import { createHelia } from "helia";
-import { createOrbitDB } from "@orbitdb/core";
+import { createOrbitDB, Documents } from "@orbitdb/core";
 import { LevelBlockstore } from "blockstore-level";
 import { bitswap } from '@helia/block-brokers';
 
@@ -16,10 +16,13 @@ export const startOrbitDB = async ({ id, identity, identities, directory } = {})
 }
 
 
-export const connectOrbitDatabase = async ({dbName, type}) => {
+export const connectOrbitDatabase = async ({dbName, type, indexedBy, address} = {}) => {
   const orbitdb = await startOrbitDB()
-  const db = await orbitdb.open(dbName, type)
-  return db
+  if (address) {
+    return {db: await orbitdb.open(address), orbitdb}
+  } else {
+    return {db: await orbitdb.open(dbName, {type, Database: Documents({indexedBy})}), orbitdb}
+  }
 }
 
 

@@ -131,6 +131,22 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					}
+				],
+				"name": "ItemNotFound",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "address",
 						"name": "owner",
 						"type": "address"
@@ -424,47 +440,83 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "supply",
+						"name": "tokenId",
 						"type": "uint256"
 					},
 					{
-						"internalType": "uint256",
-						"name": "basePrice",
-						"type": "uint256"
-					}
-				],
-				"name": "createToken",
-				"outputs": [
+						"internalType": "address payable",
+						"name": "from",
+						"type": "address"
+					},
 					{
 						"internalType": "uint256",
-						"name": "",
+						"name": "amount",
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "nonpayable",
+				"name": "buyToken",
+				"outputs": [],
+				"stateMutability": "payable",
 				"type": "function"
 			},
 			{
 				"inputs": [
 					{
-						"internalType": "address payable",
-						"name": "tokenOwner",
-						"type": "address"
-					},
-					{
 						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "numOfTokens",
+						"name": "supply",
 						"type": "uint256"
 					}
 				],
-				"name": "exhcangeEthForTokens",
+				"name": "createToken",
 				"outputs": [],
-				"stateMutability": "payable",
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAllTokensOnSale",
+				"outputs": [
+					{
+						"components": [
+							{
+								"components": [
+									{
+										"internalType": "uint256",
+										"name": "tokenId",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "supply",
+										"type": "uint256"
+									}
+								],
+								"internalType": "struct RealEstateToken.Token",
+								"name": "token",
+								"type": "tuple"
+							},
+							{
+								"internalType": "address",
+								"name": "beingSoldBy",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "pricePerToken",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct RealEstateToken.TokenOnSale[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -474,6 +526,69 @@
 					{
 						"internalType": "uint256",
 						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					}
+				],
+				"name": "getTokenOnSaleByIdAndAddress",
+				"outputs": [
+					{
+						"components": [
+							{
+								"components": [
+									{
+										"internalType": "uint256",
+										"name": "tokenId",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "supply",
+										"type": "uint256"
+									}
+								],
+								"internalType": "struct RealEstateToken.Token",
+								"name": "token",
+								"type": "tuple"
+							},
+							{
+								"internalType": "address",
+								"name": "beingSoldBy",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "pricePerToken",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct RealEstateToken.TokenOnSale",
+						"name": "",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint256",
+						"name": "index",
 						"type": "uint256"
 					}
 				],
@@ -591,6 +706,29 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "pricePerToken",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "putTokenUpToSale",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -907,13 +1045,17 @@
 		},
 		"userdoc": {
 			"kind": "user",
-			"methods": {},
+			"methods": {
+				"putTokenUpToSale(uint256,uint256,uint256)": {
+					"notice": "This is an inefficient way to put up tokens for sale. This is a demo, IRL prod this should be rewritten because with tens of thousands of real estates the gas will be high"
+				}
+			},
 			"version": 1
 		}
 	},
 	"settings": {
 		"compilationTarget": {
-			"RealEstateToken.sol": "RealEstateToken"
+			"contracts/RealEstateToken.sol": "RealEstateToken"
 		},
 		"evmVersion": "shanghai",
 		"libraries": {},
@@ -1047,12 +1189,20 @@
 				"dweb:/ipfs/QmQyRpyPRL5SQuAgj6SHmbir3foX65FJjbVTTQrA2EFg6L"
 			]
 		},
-		"RealEstateToken.sol": {
-			"keccak256": "0xb198ec5176be2adc57cec2025a6629808d8ba598cf5a944b4af2a5177352214e",
+		"contracts/RealEstateToken.sol": {
+			"keccak256": "0xe20149eb3581191bd08f67b22584bfccef6abe6445b73d4a12ca67a275a984c0",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://aadb50f9ac027b416062e0d4996966cc4b8f6c312b77a66ea10af044b2e010da",
-				"dweb:/ipfs/QmZGeKqucC1fbTFntpKKpEA1fkiZm12GmodDwf1apacDKp"
+				"bzz-raw://0cfcb398401bbb3d0151d9bfe1b363999971fbcaaea669a76dae602d8b118b0d",
+				"dweb:/ipfs/QmWpYg6DHTx4KvedhWqUX37EPGapmqH9ztt7AcWEfbC6FC"
+			]
+		},
+		"hardhat/console.sol": {
+			"keccak256": "0x7434453e6d3b7d0e5d0eb7846ffdbc27f0ccf3b163591263739b628074dc103a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://49355f780520494d1d5a0f01858385e51bb5280ce0ecfb960f16995065dca395",
+				"dweb:/ipfs/QmSwJ6C5QLz6xKeQZS8wbwjU1KxRFTYfwbGmtzisd5sRW4"
 			]
 		}
 	},
