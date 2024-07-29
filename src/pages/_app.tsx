@@ -2,14 +2,17 @@ import { Layout } from "@/components/Layout";
 import { ThemeContext } from "@/contexts";
 import { ThemeContextType } from "@/contexts/ThemeContext/types";
 import "@/styles/globals.scss";
+import { startOrbitDB, connectOrbitDatabase } from "@/utils/db";
 import { MetaMaskProvider } from "@metamask/sdk-react";
 import { NextUIProvider } from "@nextui-org/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
+import { create } from "domain";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 
+// TODO: change this, ugly as hell
 axios.defaults.baseURL = "http://localhost:3000/api";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.put["Content-Type"] = "application/json";
@@ -20,11 +23,21 @@ const queryClient = new QueryClient();
 export default function App({ Component, pageProps }: AppProps) {
   const [theme, setTheme] = useState<ThemeContextType["theme"]>("light");
 
+  const createDB = async () => {
+    const db = await connectOrbitDatabase({
+      dbName: "realEstates",
+      type: "document",
+    });
+    console.log("DB: ", db);
+  };
+
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme !== null) {
       setTheme(savedTheme as ThemeContextType["theme"]);
     }
+
+    createDB();
   }, []);
 
   const changeTheme = (theme: ThemeContextType["theme"]) => {

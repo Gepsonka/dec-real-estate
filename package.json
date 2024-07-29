@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chainsafe/libp2p-gossipsub": "^13.1.0",
     "@metamask/sdk-react": "^0.20.0",
     "@next/font": "^14.2.1",
     "@nextui-org/react": "^2.2.10",
@@ -20,6 +21,7 @@
     "ethers": "^6.12.0",
     "framer-motion": "^11.0.28",
     "helia": "^4.2.4",
+    "libp2p-gossipsub": "^0.13.0",
     "lucide-react": "^0.368.0",
     "minio": "^8.0.0",
     "mongodb": "^6.6.2",
