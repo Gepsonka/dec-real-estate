@@ -35,6 +35,13 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
         uint256 tokenId;
     }
 
+    struct TokenBuyRequest {
+        address buyer;
+        uint256 amount;
+        uint256 offeredPricePerToken; // never lower than min listing price
+        TokenOnSale tokenOnSale;
+    }
+
     event TokenCreated(uint256 indexed tokenId);
 
     error ItemNotFound(uint256 tokenId, address owner);
@@ -43,7 +50,9 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
 
     TokenWithOwner[] private tokenOwnership;
 
-    TokenOnSale[] private tokensOnSale;
+    TokenOnSale[] private _tokensOnSale;
+
+    TokenBuyRequest[] private _tokenBuyRequests;
 
     constructor(
         address initialOwner
@@ -59,6 +68,7 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
         tokens[currentTokenId] = Token(currentTokenId, supply);
 
         tokenOwnership.push(TokenWithOwner(msg.sender, currentTokenId));
+
 
         emit TokenCreated(currentTokenId);
 
@@ -78,16 +88,16 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
         require(balanceOf(msg.sender, tokenId) >= amount, "Account does not have enough tokens to sell");
 
         // Check if the user already has this token on sale, if it does modify
-        for (uint256 i = 0; i < tokensOnSale.length; i++) {
+        for (uint256 i = 0; i < _tokensOnSale.length; i++) {
             // No need to check enything else since we are sure the user has the tokens needed in the require statement
-            if (tokensOnSale[i].token.tokenId == tokenId && tokensOnSale[i].beingSoldBy == msg.sender) {
-                tokensOnSale[i].pricePerToken = pricePerToken;
-                tokensOnSale[i].amount = amount;
+            if (_tokensOnSale[i].token.tokenId == tokenId && _tokensOnSale[i].beingSoldBy == msg.sender) {
+                _tokensOnSale[i].pricePerToken = pricePerToken;
+                _tokensOnSale[i].amount = amount;
                 return;
             }
         }
 
-        tokensOnSale.push(TokenOnSale(
+        _tokensOnSale.push(TokenOnSale(
             tokens[tokenId],
             msg.sender,
             pricePerToken,
@@ -96,7 +106,67 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
     }
 
     function getAllTokensOnSale() public view returns (TokenOnSale[] memory) {
-        return tokensOnSale;
+        return _tokensOnSale;
+    }
+
+    function placeBuyRequest(uint256 tokenId, address from, uint256 amount) public payable {
+        require(balanceOf(from, tokenId) >= amount, "Account does not have the required amount of tokens");
+
+        (TokenOnSale memory tokenOnSale, uint256 index) = getTokenOnSaleByIdAndAddress(tokenId, from);
+
+        console.log("token saleprice: ", tokenOnSale.pricePerToken);
+        console.log("amount: ", amount);
+        console.log("msg.value: ", msg.value);
+
+        require(tokenOnSale.beingSoldBy != msg.sender, "Cannot buy own tokens");
+        require(tokenOnSale.amount >= amount, "Account does not sell that much token.");
+        require((tokenOnSale.pricePerToken * amount) <= msg.value, "Ethers sent must be greater or equal the listing price.");
+
+
+        _tokenBuyRequests.push(TokenBuyRequest(
+            msg.sender,
+            amount,
+            msg.value / amount,
+            tokenOnSale
+        ));
+
+    }
+
+    function getAccountTokenBuyRequests() public view returns (TokenBuyRequest[] memory) {
+        uint256 matchCount = 0;
+        for (uint256 i = 0; i < _tokenBuyRequests.length; i++ ) {
+            if (_tokenBuyRequests[i].tokenOnSale.beingSoldBy == msg.sender) {
+                //tokenBuyRequests.push(_tokenBuyRequests[i]);
+                matchCount++;
+            }
+        }
+
+        TokenBuyRequest[] memory tokenBuyRequests = new TokenBuyRequest[](matchCount);
+
+        for (uint256 i = 0; i < _tokenBuyRequests.length; i++ ) {
+            if (_tokenBuyRequests[i].tokenOnSale.beingSoldBy == msg.sender) {
+                tokenBuyRequests[i] = _tokenBuyRequests[i];
+            }
+        }
+
+        return tokenBuyRequests;
+    }
+
+    /** 
+    * There can be multiple buy requests for a token, the owner can decide which is the best and accept.
+    * This approves one and all the other offers are deleted.
+    * An account can only give one offer for a sale, currently cannot change it.
+    */
+    function approveBuyRequest(uint256 tokenId, address payable to) public {
+        for (uint256 i = 0; i < _tokenBuyRequests.length; i++) {
+            if (_tokenBuyRequests[i].buyer == to && _tokenBuyRequests[i].tokenOnSale.beingSoldBy == msg.sender && _tokenBuyRequests[i].tokenOnSale.token.tokenId == tokenId) {
+
+            }
+        }
+    }
+
+    function deleteBuyRequestByIndex(uint256 index) private {
+        
     }
 
     function buyToken(
@@ -113,14 +183,19 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
         console.log("msg.value: ", msg.value);
 
         require(tokenOnSale.beingSoldBy != msg.sender, "Cannot buy own tokens");
-        require(tokenOnSale.amount > amount, "Account does not sell that much token.");
+        require(tokenOnSale.amount >= amount, "Account does not sell that much token.");
         require((tokenOnSale.pricePerToken * amount) <= msg.value, "Price and ether sent does not match.");
+
+        setApprovalForAll(msg.sender, true);
 
         (bool sent, ) = from.call{value: msg.value}("");
         
         require(sent, "Failed to send ether");
 
+
         safeTransferFrom(from, msg.sender, tokenId, amount, "");
+
+        setApprovalForAll(msg.sender, false);
 
         // token transfer already happened
         if (tokenOnSale.amount == amount) {
@@ -130,7 +205,7 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
                 deleteTokenOwnership(tokenId, from);
             }
         } else {
-            tokensOnSale[index].amount = tokensOnSale[index].amount - amount;
+            _tokensOnSale[index].amount = _tokensOnSale[index].amount - amount;
         }
 
         if (balanceOf(msg.sender, tokenId) == amount) {
@@ -140,9 +215,9 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
     }
 
     function getTokenOnSaleByIdAndAddress(uint256 tokenId, address owner) public view returns (TokenOnSale memory, uint256 index) {
-        for (uint256 i = 0; i < tokensOnSale.length; i++) {
-            if (tokensOnSale[i].token.tokenId == tokenId && tokensOnSale[i].beingSoldBy == owner) {
-                return (tokensOnSale[i], i);
+        for (uint256 i = 0; i < _tokensOnSale.length; i++) {
+            if (_tokensOnSale[i].token.tokenId == tokenId && _tokensOnSale[i].beingSoldBy == owner) {
+                return (_tokensOnSale[i], i);
             }
         }
 
@@ -150,11 +225,11 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
     }
 
     function deleteTokenOnSaleByIdAndAddress(uint256 tokenId, address owner) private returns (TokenOnSale memory) {
-        for (uint256 i = 0; i < tokensOnSale.length; i++) {
-            if (tokensOnSale[i].token.tokenId == tokenId && tokensOnSale[i].beingSoldBy == owner) {
-                TokenOnSale memory tokenOnSale = tokensOnSale[i];
-                tokensOnSale[i] = tokensOnSale[tokensOnSale.length - 1];
-                tokensOnSale.pop();
+        for (uint256 i = 0; i < _tokensOnSale.length; i++) {
+            if (_tokensOnSale[i].token.tokenId == tokenId && _tokensOnSale[i].beingSoldBy == owner) {
+                TokenOnSale memory tokenOnSale = _tokensOnSale[i];
+                _tokensOnSale[i] = _tokensOnSale[_tokensOnSale.length - 1];
+                _tokensOnSale.pop();
                 return tokenOnSale;
             }
         }
