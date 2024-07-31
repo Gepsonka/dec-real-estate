@@ -30,8 +30,8 @@ export const sidebarItems: SidebarLinkT[] = [
     ),
   },
   {
-    title: "Create Listing",
-    href: clientURLs.marketplace_createListing,
+    title: "Create Token",
+    href: clientURLs.token_createToken,
     icon: () => (
       <LucideIconWrapper
         Icon={Plus}

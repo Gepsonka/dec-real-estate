@@ -1,13 +1,21 @@
-import { RealEstate } from "./types";
+import { RealEstateToken } from "./types";
 
-export function getAllRealEstates(db: any): RealEstate[] {
-  return db.all() as RealEstate[];
+export async function getAllRealEstates(db: any): Promise<RealEstateToken[]> {
+  return (await db.all()) as RealEstateToken[];
 }
 
-export function getRealEstateById(db: any, tokenId: string): RealEstate {
-  return db.get(tokenId) as RealEstate;
+export async function getRealEstateById(
+  db: any,
+  tokenId: string
+): Promise<RealEstateToken> {
+  return (await db.get(tokenId)) as RealEstateToken;
 }
 
-export function createRealEstate(db: any, realEstate: RealEstate): RealEstate {
-  return db.put(realEstate) as RealEstate;
+export async function createRealEstate(
+  db: any,
+  realEstate: RealEstateToken
+): Promise<RealEstateToken> {
+  await db.put(realEstate);
+
+  return realEstate;
 }

@@ -1,14 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { testRealEstates } from "./constants";
 import { RealEstateCard } from "./RealEstateCard";
 import { ListingProps } from "./types";
-import { RealEstate } from "@/utils/db/RealEstateCollection/types";
 import { useRouter } from "next/router";
 import { WithId } from "mongodb";
 import { clientURLs } from "@/utils";
+import { useReadContract } from "wagmi";
+import realEstateTokenAbi from "@/abi/RealEstateTokenAbi.json";
 
 export const Listing = (props: ListingProps) => {
   const router = useRouter();
+  if (props.isAssets) {
+    const result = useReadContract({
+      abi: realEstateTokenAbi,
+      address: process.env
+        .NEXT_PUBLIC_REAL_ESTATE_TOKEN_CONTRACT_ADDRESS as any,
+      functionName: "getAllOwnedTokens",
+    });
+  }
+
+  // for debug, remove later
+  useEffect(() => {
+    if (props.isAssets && result.data) {
+      console.log("Data: ", result.data);
+    }
+  }, [result.data]);
+
+  const renderAssets = () => {};
 
   const renderRealEstateCards = () => {
     if (!props.realEstates) return;

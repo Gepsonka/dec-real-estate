@@ -1,7 +1,7 @@
 import { Libp2p2Options } from "@/config/libp2p";
 import { createLibp2p } from "libp2p";
 import { createHelia } from "helia";
-import { createOrbitDB, Documents } from "@orbitdb/core";
+import { createOrbitDB, Documents, IPFSAccessController } from "@orbitdb/core";
 import { LevelBlockstore } from "blockstore-level";
 import { bitswap } from '@helia/block-brokers';
 
@@ -21,7 +21,7 @@ export const connectOrbitDatabase = async ({dbName, type, indexedBy, address} = 
   if (address) {
     return {db: await orbitdb.open(address), orbitdb}
   } else {
-    return {db: await orbitdb.open(dbName, {type, Database: Documents({indexedBy})}), orbitdb}
+    return {db: await orbitdb.open(dbName, {type, Database: Documents({indexedBy}),  AccessController: IPFSAccessController({ write: ['*'] })}), orbitdb}
   }
 }
 
@@ -31,5 +31,3 @@ export const stopOrbitDB = async (orbitdb) => {
   await orbitdb.ipfs.stop()
   await orbitdb.ipfs.blockstore.unwrap().unwrap().child.db.close()
 }
-
-

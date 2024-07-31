@@ -228,6 +228,12 @@
 				"inputs": [
 					{
 						"indexed": true,
+						"internalType": "address",
+						"name": "createdBy",
+						"type": "address"
+					},
+					{
+						"indexed": true,
 						"internalType": "uint256",
 						"name": "tokenId",
 						"type": "uint256"
@@ -345,6 +351,24 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					}
+				],
+				"name": "approveBuyRequest",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "address",
 						"name": "account",
 						"type": "address"
@@ -440,29 +464,6 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address payable",
-						"name": "from",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					}
-				],
-				"name": "buyToken",
-				"outputs": [],
-				"stateMutability": "payable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
 						"name": "supply",
 						"type": "uint256"
 					}
@@ -470,6 +471,100 @@
 				"name": "createToken",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAccountTokenBuyRequests",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "buyer",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "offeredPricePerToken",
+								"type": "uint256"
+							},
+							{
+								"components": [
+									{
+										"components": [
+											{
+												"internalType": "uint256",
+												"name": "tokenId",
+												"type": "uint256"
+											},
+											{
+												"internalType": "uint256",
+												"name": "supply",
+												"type": "uint256"
+											}
+										],
+										"internalType": "struct RealEstateToken.Token",
+										"name": "token",
+										"type": "tuple"
+									},
+									{
+										"internalType": "address",
+										"name": "beingSoldBy",
+										"type": "address"
+									},
+									{
+										"internalType": "uint256",
+										"name": "pricePerToken",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "amount",
+										"type": "uint256"
+									}
+								],
+								"internalType": "struct RealEstateToken.TokenOnSale",
+								"name": "tokenOnSale",
+								"type": "tuple"
+							}
+						],
+						"internalType": "struct RealEstateToken.TokenBuyRequest[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAllOwnedTokens",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "owner",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct RealEstateToken.TokenWithOwner[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -620,62 +715,6 @@
 				"type": "function"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "account",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bytes",
-						"name": "data",
-						"type": "bytes"
-					}
-				],
-				"name": "mint",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "to",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256[]",
-						"name": "ids",
-						"type": "uint256[]"
-					},
-					{
-						"internalType": "uint256[]",
-						"name": "amounts",
-						"type": "uint256[]"
-					},
-					{
-						"internalType": "bytes",
-						"name": "data",
-						"type": "bytes"
-					}
-				],
-				"name": "mintBatch",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
 				"inputs": [],
 				"name": "owner",
 				"outputs": [
@@ -690,13 +729,6 @@
 			},
 			{
 				"inputs": [],
-				"name": "pause",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "paused",
 				"outputs": [
 					{
@@ -706,6 +738,29 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "placeBuyRequest",
+				"outputs": [],
+				"stateMutability": "payable",
 				"type": "function"
 			},
 			{
@@ -825,19 +880,6 @@
 			{
 				"inputs": [
 					{
-						"internalType": "string",
-						"name": "newuri",
-						"type": "string"
-					}
-				],
-				"name": "setURI",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
 						"internalType": "bytes4",
 						"name": "interfaceId",
 						"type": "bytes4"
@@ -863,13 +905,6 @@
 					}
 				],
 				"name": "transferOwnership",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "unpause",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -1046,6 +1081,9 @@
 		"userdoc": {
 			"kind": "user",
 			"methods": {
+				"approveBuyRequest(uint256,address)": {
+					"notice": "There can be multiple buy requests for a token, the owner can decide which is the best and accept. This approves one and all the other offers are deleted. An account can only give one offer for a sale, currently cannot change it."
+				},
 				"putTokenUpToSale(uint256,uint256,uint256)": {
 					"notice": "This is an inefficient way to put up tokens for sale. This is a demo, IRL prod this should be rewritten because with tens of thousands of real estates the gas will be high"
 				}
@@ -1190,11 +1228,11 @@
 			]
 		},
 		"contracts/RealEstateToken.sol": {
-			"keccak256": "0xeb8c71e65c51a97bf62da705fdca9452ee03ef6da695e16c8b35642fcdd396f0",
+			"keccak256": "0x588ceaed202bd0c9b05a2c421db10658b7db6906974ebfb689c0670e3da94746",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://64c8bc66f376234c84b58934acfcfcd25d8e669eff9613773c8d236b74683d57",
-				"dweb:/ipfs/QmSGTuBUvVCVfkksAAVNqYgQ1ghUgX3bPja7zX3pu7HzV8"
+				"bzz-raw://c7eb97b076a9163779a5e644040a7cd4524caaf47c3094cc1796bf7eb22015f1",
+				"dweb:/ipfs/QmSqWqVjT7nMpbNnQDJQeUuTwYPXQTC8BY9Bu3v1HLBwUV"
 			]
 		},
 		"hardhat/console.sol": {

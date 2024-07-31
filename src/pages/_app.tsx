@@ -12,6 +12,8 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import orbitdbAddress from "@/utils/db/orbitDBAdress.json";
 import { useDbStore } from "@/stores";
+import { WagmiProvider } from "wagmi";
+import { wagmiConfig } from "@/config/wagmi";
 
 // TODO: change this, ugly as hell
 axios.defaults.baseURL = "http://localhost:3000/api";
@@ -39,7 +41,7 @@ export default function App({ Component, pageProps }: AppProps) {
     dbStore.setDb(db);
     dbStore.setDbInstance(orbitdb);
 
-    //await stopOrbitDB(orbitdb);
+    // await stopOrbitDB(orbitdb);
   };
 
   useEffect(() => {
@@ -61,19 +63,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme: changeTheme }}>
-      <QueryClientProvider client={queryClient}>
-        <NextUIProvider>
-          <MetaMaskProvider
-            debug={true}
-            sdkOptions={{
-              dappMetadata: {
-                name: "Example React Dapp",
-                url: host,
-              },
-              infuraAPIKey: process.env.INFURA_API_KEY,
-              // Other options
-            }}
-          >
+      <WagmiProvider config={wagmiConfig}>
+        <QueryClientProvider client={queryClient}>
+          <NextUIProvider>
             <Head>
               <link rel="preconnect" href="https://fonts.googleapis.com" />
               <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -85,9 +77,9 @@ export default function App({ Component, pageProps }: AppProps) {
             <Layout>
               <Component {...pageProps} />
             </Layout>
-          </MetaMaskProvider>
-        </NextUIProvider>
-      </QueryClientProvider>
+          </NextUIProvider>
+        </QueryClientProvider>
+      </WagmiProvider>
     </ThemeContext.Provider>
   );
 }

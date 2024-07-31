@@ -5,7 +5,7 @@ export const clientURLs = {
   about: "/about",
   contact: "/contact",
   marketplace: "/marketplace",
-  marketplace_createListing: "/marketplace/create",
+  token_createToken: "/token/create",
   marketplace_assets: "/marketplace/assets",
   realEstate_instance: (id: string) => `/marketplace/${id}`,
 };
