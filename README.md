@@ -1,40 +1,59 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Getting Started
 
-## Getting Started
-
-First, run the development server:
+First go into the root directory and run the following command:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+npm install --legacy-peer-deps
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then go into the `web3` directory and run the following command:
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```bash
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+npm install
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Start hardhat node:
 
-## Learn More
+```bash
 
-To learn more about Next.js, take a look at the following resources:
+npx hardhat node
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+this will start the hardhat node on `http://localhost:8545/`
 
-## Deploy on Vercel
+Go back to the root directory and run start the local development server:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+npm run dev
+
+```
+
+this will start the local development server on `http://localhost:3000/`
+
+# Testing
+
+You can test the smart contract by isntalling remix IDE and change the workspace to localhost and open the web3 directory.
+
+The `RealEstate.sol` is the smart contract.
+
+After pressing `Ctrl + S` the smart contract will be compiled.
+
+Then you can deploy the smart contract on the local hardhat node by going into `Deploy & Run Transactions` tab and selecting the `Dev - Hardhat Provider` environment.
+
+Then you can deploy the smart contract by pressing the `Deploy` button.
+
+## Be careful!!
+
+After changin the smart contract you have to deploy it again to see the changes, and modify the smart contract address in the .env.local file, then change the contract ABI in `src/abi/RealEstateTokenAbi.json` file.
+
+You can copy the abi from remix of the compiled contract under the solidity compiler tab.
+
+# Features
+
+Right now only the token creation and the asset listing works, since I had to change a lot in the smart contract and changes some tools on the client side as well (wagmi, OrbitDb, etc.)
