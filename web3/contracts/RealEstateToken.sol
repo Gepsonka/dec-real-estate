@@ -32,7 +32,7 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
      */
     struct TokenWithOwner {
         address owner;
-        uint256 tokenId;
+        Token token;
     }
 
     struct TokenBuyRequest {
@@ -71,16 +71,16 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
             }
         }
 
-        TokenWithOwner[] memory tokens = new TokenWithOwner[](count);
+        TokenWithOwner[] memory tempTokenOwnership = new TokenWithOwner[](count);
         uint256 index = 0;
         for (uint256 i = 0; i < tokenOwnership.length; i++) {
             if (tokenOwnership[i].owner == msg.sender) {
-                tokens[index] = tokenOwnership[i];
+                tempTokenOwnership[index] = tokenOwnership[i];
                 index++;
             }
         }
 
-        return tokens;
+        return tempTokenOwnership;
 
     }
 
@@ -88,7 +88,7 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
         _mint(msg.sender, currentTokenId, supply, "0x0");
         tokens[currentTokenId] = Token(currentTokenId, supply);
 
-        tokenOwnership.push(TokenWithOwner(msg.sender, currentTokenId));
+        tokenOwnership.push(TokenWithOwner(msg.sender, Token(currentTokenId, supply)));
 
         emit TokenCreated(msg.sender, currentTokenId);
 
@@ -211,6 +211,7 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
                 // Send back the deposited ether to whom requests was declined
                 (bool success, ) = _tokenBuyRequests[i].buyer.call{value: _tokenBuyRequests[i].amount * _tokenBuyRequests[i].offeredPricePerToken}("BUY_REQUEST_DECLINED_REFUND");
                 
+                
                 // delete requests
                 deleteBuyRequestByIndex(i);
             }
@@ -254,7 +255,7 @@ contract RealEstateToken is ERC1155, Ownable, ERC1155Pausable, ERC1155Burnable {
 
     function deleteTokenOwnership(uint256 tokenId, address owner) private returns (TokenWithOwner memory) {
         for (uint256 i = 0; i < tokenOwnership.length; i++) {
-            if (tokenOwnership[i].tokenId == tokenId && tokenOwnership[i].owner == owner) {
+            if (tokenOwnership[i].token.tokenId == tokenId && tokenOwnership[i].owner == owner) {
                 TokenWithOwner memory tokenWithOwner = tokenOwnership[i];
                 tokenOwnership[i] = tokenOwnership[tokenOwnership.length - 1];
                 tokenOwnership.pop();

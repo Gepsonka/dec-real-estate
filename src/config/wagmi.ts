@@ -2,6 +2,7 @@ import { localhost } from "@wagmi/core/chains";
 import { http, createConfig } from "@wagmi/core";
 import { defineChain } from "viem";
 import { metaMask } from "@wagmi/connectors";
+import { Config } from "wagmi";
 
 const hardhatLocal = defineChain({
   id: 31337,
@@ -26,7 +27,7 @@ const MetaMaskOptions = {
   infuraAPIKey: process.env.INFURA_API_KEY,
 };
 
-export const wagmiConfig = createConfig({
+export const wagmiConfig: Config = createConfig({
   chains: [hardhatLocal],
   transports: {
     [hardhatLocal.id]: http(),

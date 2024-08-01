@@ -554,9 +554,21 @@
 								"type": "address"
 							},
 							{
-								"internalType": "uint256",
-								"name": "tokenId",
-								"type": "uint256"
+								"components": [
+									{
+										"internalType": "uint256",
+										"name": "tokenId",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "supply",
+										"type": "uint256"
+									}
+								],
+								"internalType": "struct RealEstateToken.Token",
+								"name": "token",
+								"type": "tuple"
 							}
 						],
 						"internalType": "struct RealEstateToken.TokenWithOwner[]",
@@ -1228,11 +1240,11 @@
 			]
 		},
 		"contracts/RealEstateToken.sol": {
-			"keccak256": "0x588ceaed202bd0c9b05a2c421db10658b7db6906974ebfb689c0670e3da94746",
+			"keccak256": "0xb883bd431c5bea54eb5b77abf86dcadcd57cc6be33b31599c1cb7d5411f86a5d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c7eb97b076a9163779a5e644040a7cd4524caaf47c3094cc1796bf7eb22015f1",
-				"dweb:/ipfs/QmSqWqVjT7nMpbNnQDJQeUuTwYPXQTC8BY9Bu3v1HLBwUV"
+				"bzz-raw://b434bd168911942259bc056722de4d315acc4f1f5d096c165ba8f6600f0a9a6d",
+				"dweb:/ipfs/QmUt9BMBqUf6JEn2yxmpRTNxRHoyuxpr317VdeERgk58RF"
 			]
 		},
 		"hardhat/console.sol": {
