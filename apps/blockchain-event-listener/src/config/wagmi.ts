@@ -1,12 +1,12 @@
 import { defineChain, http, createPublicClient } from "viem";
 
-const hardhatLocal = defineChain({
+const chain = defineChain({
   id: 31337,
   name: "Ethereum",
   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
   rpcUrls: {
     default: {
-      http: ["http://localhost:8545"],
+      http: [process.env.CHAIN_ADDRESS as string],
     },
   },
   contracts: {
@@ -18,3 +18,5 @@ const hardhatLocal = defineChain({
     },
   },
 });
+
+const client = createPublicClient({ chain: chain, transport: http() });
