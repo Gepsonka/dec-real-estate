@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "name": "dec-real-estate",
+  "packageManager": "npm@10.8.2",
+  "devDependencies": {
+    "turbo": "^2.1.3"
+  },
+  "workspaces": [
+      "apps/*",
+      "packages/*"
+    ]
+}

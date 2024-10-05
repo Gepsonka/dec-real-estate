@@ -1,0 +1,30 @@
+
+
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 100%;
+
+  .real-estate-page-information-container {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    align-items: center;
+
+    .page-element {
+      display: flex;
+      width: 100%;
+    }
+
+    .real-estate-title {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+  }
+
+}
