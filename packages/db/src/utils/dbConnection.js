@@ -1,9 +1,9 @@
-import { Libp2p2Options } from "@repo/configs/libp2p";
 import { createLibp2p } from "libp2p";
 import { createHelia } from "helia";
 import { createOrbitDB, Documents, IPFSAccessController } from "@orbitdb/core";
 import { LevelBlockstore } from "blockstore-level";
 import { bitswap } from '@helia/block-brokers';
+import { Libp2p2Options } from "@repo/configs/libp2p";
 
 export const startOrbitDB = async ({ id, identity, identities, directory } = {}) => {
   const options = Libp2p2Options;
@@ -16,21 +16,20 @@ export const startOrbitDB = async ({ id, identity, identities, directory } = {})
 }
 
 
-export const connectOrbitDatabase = async ({dbName, type, indexBy, address} = {}) => {
-  const orbitdb = await startOrbitDB()
-  if (address) {
-    const db = await orbitdb.open(address)
-    return {db, orbitdb}
-  } else {
-    console.log('Creating new database');
-    const db = await orbitdb.open(dbName, {type, Database: Documents({indexBy}),  AccessController: IPFSAccessController({ write: ['*'] })})
-    return {db, orbitdb}
-  }
+export async function createOrbitDatabase({dbName, type, indexBy} = {}) {
+  console.log('Creating new database');
+  const db = await orbitdb.open(dbName, {type, Database: Documents({indexBy}),  AccessController: IPFSAccessController({ write: ['*'] })})
+  return {db, orbitdb}
 }
 
 
-export const stopOrbitDB = async (orbitdb) => {
-  await orbitdb.stop()
-  await orbitdb.ipfs.stop()
-  await orbitdb.ipfs.blockstore.unwrap().unwrap().child.db.close()
+export async function connectOrbitDatabase(address) {
+  const db = await orbitdb.open(address)
+  return {db, orbitdb}
+}
+
+export async function stopOrbitDb(orbitDb) {
+  await orbitDb.stop()
+  await orbitDb.ipfs.stop()
+  await orbitDb.ipfs.blockstore.unwrap().unwrap().child.db.close()
 }

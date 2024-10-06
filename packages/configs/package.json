@@ -1,0 +1,31 @@
+{
+  "name": "@repo/configs",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc"
+  },
+  "exports": {
+    "./viem": {
+      "types": "./src/viem.ts",
+      "default": "./dist/viem.js"
+    },
+    "./libp2p": {
+      "types": "./src/libp2p.ts",
+      "default": "./dist/libp2p.js"
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "helia": "^4.2.6",
+    "viem": "^2.21.18"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "typescript": "^5.6.2"
+  }
+}

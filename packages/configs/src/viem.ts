@@ -1,6 +1,6 @@
 import { defineChain, http, createPublicClient } from "viem";
 
-const chain = defineChain({
+export const chain = defineChain({
   id: 31337,
   name: "Ethereum",
   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
@@ -18,5 +18,3 @@ const chain = defineChain({
     },
   },
 });
-
-const client = createPublicClient({ chain: chain, transport: http() });

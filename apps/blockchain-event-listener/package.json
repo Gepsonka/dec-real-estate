@@ -2,6 +2,7 @@
   "name": "blockchain-event-listener",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx tsc && node dist/index.js"
@@ -11,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@repo/configs": "*",
     "@orbitdb/core": "^2.2.0",
     "@wagmi/connectors": "^5.1.15",
     "@wagmi/core": "^2.13.8",
