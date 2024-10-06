@@ -7,7 +7,7 @@ import {Libp2p2Options} from "@repo/configs/libp2p";
 
 export const startOrbitDB = async ({ id, identity, identities, directory } = {}) => {
   const libp2p = await createLibp2p({ ...Libp2p2Options })
-  directory = directory || '.'
+  directory = directory || '$HOME'
   const blockstore = new LevelBlockstore(`${directory}/ipfs/blocks`)
   const ipfs = await createHelia({ libp2p, blockstore, blockBrokers: [bitswap()] })
   const orbitdb = await createOrbitDB({ ipfs, id, identity, identities, directory })
@@ -15,14 +15,14 @@ export const startOrbitDB = async ({ id, identity, identities, directory } = {})
 }
 
 
-export async function createOrbitDatabase({dbName, type, indexBy} = {}) {
+export async function createOrbitDatabase({orbitdb, dbName, type, indexBy} = {}) {
   console.log('Creating new database');
   const db = await orbitdb.open(dbName, {type, Database: Documents({indexBy}),  AccessController: IPFSAccessController({ write: ['*'] })})
   return {db, orbitdb}
 }
 
 
-export async function connectOrbitDatabase(address) {
+export async function connectOrbitDatabase(orbitdb, address) {
   const db = await orbitdb.open(address)
   return {db, orbitdb}
 }

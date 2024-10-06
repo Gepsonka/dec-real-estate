@@ -1,4 +1,4 @@
-import { createOrbitDatabase } from "@repo/db/dbConnection";
+import { createOrbitDatabase, startOrbitDB } from "@repo/db/dbConnection";
 import fs from "fs";
 
 const DB_NAME = "RealEstate"
@@ -10,13 +10,16 @@ export function writeAddress(address) {
   const dataString = JSON.stringify({
     address
   })
-  fs.writeFileSync('../../resources/orbitdbAddress.json', dataString)
+  fs.writeFileSync('resources/orbitdbAddress.json', dataString, 'utf-8')
 }
 
 
 export async function createDb() {
-  const {db, orbitdb} = createOrbitDatabase({dbName: DB_NAME, type: TYPE, indexBy: INDEX_BY});
+  const orbitdb = await startOrbitDB()
+  const {db} = await createOrbitDatabase({orbitdb: orbitdb, dbName: DB_NAME, type: TYPE, indexBy: INDEX_BY});
   console.log("address: ", db.address)
+
+  writeAddress(db.address)
 }
 
 
