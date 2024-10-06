@@ -3,11 +3,10 @@ import { createHelia } from "helia";
 import { createOrbitDB, Documents, IPFSAccessController } from "@orbitdb/core";
 import { LevelBlockstore } from "blockstore-level";
 import { bitswap } from '@helia/block-brokers';
-import { Libp2p2Options } from "@repo/configs/libp2p";
+import {Libp2p2Options} from "@repo/configs/libp2p";
 
 export const startOrbitDB = async ({ id, identity, identities, directory } = {}) => {
-  const options = Libp2p2Options;
-  const libp2p = await createLibp2p({ ...options })
+  const libp2p = await createLibp2p({ ...Libp2p2Options })
   directory = directory || '.'
   const blockstore = new LevelBlockstore(`${directory}/ipfs/blocks`)
   const ipfs = await createHelia({ libp2p, blockstore, blockBrokers: [bitswap()] })
