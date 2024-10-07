@@ -6,7 +6,7 @@ import { viemPublicClient } from "./utils/blockchain/viemClient.ts";
 import { tokenContractAbi } from "@repo/web3/abi";
 import { onLogs } from "./utils/blockchain/eventDispatcher.ts";
 
-const unwatch = viemPublicClient.watchContractEvent({
+viemPublicClient.watchContractEvent({
   address: [
     process.env.TOKEN_CONTRACT_ADDRESS as `0x${string}`,
     process.env.MARKETPLACE_CONTRACT_ADDRESS as `0x${string}`,
