@@ -1,5 +1,3 @@
-
-
 const tokenContractMetadata = require("../artifacts/ERC1155Token_metadata.json");
 const tokenMarketplaceMetadata = require("../artifacts/ERC1155Marketplace_metadata.json");
 

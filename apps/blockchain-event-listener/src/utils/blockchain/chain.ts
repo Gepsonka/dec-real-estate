@@ -1,4 +1,9 @@
-import { defineChain, http, createPublicClient } from "viem";
+import { defineChain } from "viem";
+import * as dotenv from "dotenv";
+
+dotenv.config();
+
+console.log("chain url: ", process.env.CHAIN_RPC_URL);
 
 export const chain = defineChain({
   id: 31337,

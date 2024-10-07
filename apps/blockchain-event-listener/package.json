@@ -5,15 +5,17 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx tsc && node dist/index.js"
+    "start": "npx tsx src/index.ts",
+    "lint": "eslint"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@repo/configs": "*",
     "@orbitdb/core": "^2.2.0",
+    "@repo/configs": "*",
+    "@repo/web3": "*",
     "@wagmi/connectors": "^5.1.15",
     "@wagmi/core": "^2.13.8",
     "dotenv": "^16.4.5",
@@ -22,7 +24,14 @@
     "viem": "^2.21.18"
   },
   "devDependencies": {
+    "@eslint/js": "^9.12.0",
     "@types/node": "^22.7.4",
-    "typescript": "^5.6.2"
+    "@typescript-eslint/eslint-plugin": "^8.8.1",
+    "@typescript-eslint/parser": "^8.8.1",
+    "eslint": "^9.12.0",
+    "globals": "^15.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.8.1"
   }
 }
