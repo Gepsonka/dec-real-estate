@@ -1,5 +1,10 @@
 import * as dotenv from "dotenv";
 dotenv.config();
+
+import { viemPublicClient } from "./utils/blockchain/viemClient.ts";
+import { tokenContractAbi, tokenMarketplaceAbi } from "@repo/web3";
+import { onLogs } from "./utils/blockchain/eventDispatcher.ts";
+
 console.log("rpc url: ", process.env.CHAIN_RPC_URL);
 console.log(
   "token contract addr: ",
@@ -11,17 +16,11 @@ console.log(
   process.env.MARKETPLACE_CONTRACT_ADDRESS as `0x${string}`
 );
 
-console.log("token abi:", JSON.stringify(tokenContractAbi));
-
-import { viemPublicClient } from "./utils/blockchain/viemClient.ts";
-import { tokenContractAbi, tokenMarketplaceAbi } from "@repo/web3";
-import { onLogs } from "./utils/blockchain/eventDispatcher.ts";
-
 const tokenContractUnwatch = viemPublicClient.watchContractEvent({
   address: process.env.TOKEN_CONTRACT_ADDRESS as `0x${string}`,
   abi: tokenContractAbi,
-  eventName: "TransferSingle",
-  onLogs: (logs) => console.log(logs),
+  eventName: "TokenCreated",
+  onLogs: onLogs,
 });
 
 // const marketplaceContractUnwatch = viemPublicClient.watchContractEvent({
