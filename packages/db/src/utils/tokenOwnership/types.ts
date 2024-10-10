@@ -2,7 +2,7 @@ import { Document } from "mongodb";
 import { WalletAddress } from "../types.ts";
 
 export interface TokenOwnershipModel extends Document {
-  tokenId: BigInt;
+  tokenId: string;
   ownerAddress: WalletAddress;
-  amount: BigInt;
+  amount: string;
 }
