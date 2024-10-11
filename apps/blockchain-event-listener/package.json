@@ -13,15 +13,16 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@repo/db": "*",
     "@orbitdb/core": "^2.2.0",
     "@repo/configs": "*",
+    "@repo/db": "*",
     "@repo/web3": "*",
     "@wagmi/connectors": "^5.1.15",
     "@wagmi/core": "^2.13.8",
     "dotenv": "^16.4.5",
     "hardhat": "^2.22.12",
     "helia": "^4.2.6",
+    "mongodb": "^6.9.0",
     "viem": "^2.21.18"
   },
   "devDependencies": {

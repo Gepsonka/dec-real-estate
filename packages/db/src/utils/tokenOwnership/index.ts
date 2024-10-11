@@ -1,11 +1,8 @@
 import {
   Collection,
-  Condition,
-  Document,
   Filter,
   OptionalUnlessRequiredId,
   UpdateFilter,
-  WithId,
 } from "mongodb";
 import { MongoDatabase } from "../database/index.ts";
 import { TokenOwnershipModel } from "./types.ts";
@@ -38,6 +35,23 @@ export class TokenOwnership<
   ) {
     await this.receiveTokens(to, tokenId, amount);
     await this.substractTokens(from, tokenId, amount);
+  }
+
+  async createOwnership(owner: WalletAddress, tokenId: bigint, amount: bigint) {
+    try {
+      const tokenOwnership = await this.getUserTokenOwnership(owner, tokenId);
+      throw new OwnershipAlreadyExists(
+        "User already has ownership of token",
+        tokenOwnership
+      );
+    } catch (err) {
+      const doc = {
+        tokenId: tokenId.toString(),
+        ownerAddress: owner,
+        amount: amount.toString(),
+      } as OptionalUnlessRequiredId<TokenOwnershipT>;
+      const result = await this.collection.insertOne(doc);
+    }
   }
 
   private async getUserTokenOwnership(address: WalletAddress, tokenId: bigint) {
@@ -123,27 +137,6 @@ export class TokenOwnership<
     }
   }
 
-  private async createOwnership(
-    owner: WalletAddress,
-    tokenId: bigint,
-    amount: bigint
-  ) {
-    try {
-      const tokenOwnership = await this.getUserTokenOwnership(owner, tokenId);
-      throw new OwnershipAlreadyExists(
-        "User already has ownership of token",
-        tokenOwnership
-      );
-    } catch (err) {
-      const doc = {
-        tokenId: tokenId.toString(),
-        ownerAddress: owner,
-        amount: amount.toString(),
-      } as OptionalUnlessRequiredId<TokenOwnershipT>;
-      const result = await this.collection.insertOne(doc);
-    }
-  }
-
   private async deleteOwnership(owner: WalletAddress, tokenId: bigint) {
     const tokenOwnership = await this.getUserTokenOwnership(owner, tokenId);
 
@@ -158,3 +151,6 @@ export class TokenOwnership<
     return deletedOwnership;
   }
 }
+
+export * from "./errors.ts";
+export * from "./types.ts";

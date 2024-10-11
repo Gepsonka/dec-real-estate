@@ -7,7 +7,7 @@ import {
 import { MongoDatabase } from "../database/index.ts";
 import { TokenModel } from "./types.ts";
 
-export class Token<TokenModelT extends Document = TokenModel> {
+export class Token<TokenModelT extends TokenModel = TokenModel> {
   private database: MongoDatabase;
   private collection: Collection<TokenModelT>;
 
@@ -18,7 +18,12 @@ export class Token<TokenModelT extends Document = TokenModel> {
       .collection<TokenModelT>(collectionName);
   }
 
-  createToken(token: OptionalUnlessRequiredId<TokenModelT>) {
-    this.collection.insertOne(token);
+  async createToken(token: TokenModelT) {
+    const doc = {
+      ...token,
+    } as OptionalUnlessRequiredId<TokenModelT>;
+    await this.collection.insertOne(doc);
   }
 }
+
+export * from "./types.ts";
