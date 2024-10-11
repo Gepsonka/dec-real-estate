@@ -3,8 +3,7 @@ dotenv.config();
 
 import { viemPublicClient } from "./utils/blockchain/viemClient.ts";
 import { tokenContractAbi, tokenMarketplaceAbi } from "@repo/web3";
-import { onLogsTokenContract } from "./utils/blockchain/eventDispatcher.ts";
-import * as db from "./utils/db/index.ts";
+import { onLogsTokenContract } from "./utils/blockchain/tokenContractEventDispatcher.ts";
 
 console.log("rpc url: ", process.env.CHAIN_RPC_URL);
 console.log(

@@ -1,7 +1,5 @@
-import { tokenContractAbi } from "@repo/web3";
-import { type Log, decodeEventLog } from "viem";
-import { ownershipService, tokenService } from "../db/index.ts";
-import { TokenModel, TokenOwnershipModel } from "@repo/db";
+import { TokenModel } from "@repo/db";
+import { ownershipService, tokenService } from "../../../db/index.ts";
 
 export interface TokenCreatedEventArgs {
   tokenId: bigint;
@@ -20,8 +18,10 @@ export function convertHexDataToJson(data: `0x${string}`) {
   return JSON.parse(jsonString);
 }
 
-async function tokenCreatedEventEmitted(args: TokenCreatedEventArgs) {
+export async function tokenCreatedEventHandler(args: TokenCreatedEventArgs) {
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   let decodedData: any;
+
   try {
     decodedData = convertHexDataToJson(args.data);
   } catch (err) {
@@ -45,26 +45,3 @@ async function tokenCreatedEventEmitted(args: TokenCreatedEventArgs) {
     args.amount
   );
 }
-
-export function onLogsTokenContract(logs: Log[]) {
-  const decodedEventLogs = logs.map((log) => {
-    return decodeEventLog({
-      abi: tokenContractAbi,
-      data: log.data,
-      topics: log.topics,
-    });
-  });
-
-  decodedEventLogs.forEach((decodedLog) => {
-    console.log(decodedLog);
-  });
-
-  decodedEventLogs.forEach(async (decodedLog) => {
-    const args: TokenCreatedEventArgs =
-      decodedLog.args as unknown as TokenCreatedEventArgs;
-    if (decodedLog.eventName === "TokenCreated")
-      await tokenCreatedEventEmitted(args);
-  });
-}
-
-export function onLogsMarketplaceContract(logs: Log[]) {}
