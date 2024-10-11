@@ -1,0 +1,16 @@
+
+
+
+.navbar {
+  @apply w-max sticky top-0;
+  @apply bg-white;
+
+  h1 {
+    @apply text-3xl m-3;
+  }
+
+  .dark & {
+    @apply bg-black;
+  }
+}
+

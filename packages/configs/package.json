@@ -7,16 +7,13 @@
   },
   "exports": {
     "./viem": {
-      "types": "./src/viem.ts",
-      "default": "./dist/viem.js"
+      "default": "./src/viem.ts"
     },
     "./libp2p": {
-      "types": "./src/libp2p.ts",
-      "default": "./dist/libp2p.js"
+      "default": "./src/libp2p.ts"
     },
     "./wagmi": {
-      "types": "./src/wagmi.ts",
-      "default": "./dist/wagmi.js"
+      "default": "./src/wagmi.ts"
     }
   },
   "keywords": [],
