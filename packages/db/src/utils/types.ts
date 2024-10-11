@@ -5,3 +5,8 @@ export class ErrorWithContext extends Error {
     super(message);
   }
 }
+
+// Makes mongo collections clearable, for development purposes!
+export interface Clearable {
+  clearCollection(): Promise<void>;
+}

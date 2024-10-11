@@ -6,7 +6,7 @@ import {
 } from "mongodb";
 import { MongoDatabase } from "../database/index.ts";
 import { TokenOwnershipModel } from "./types.ts";
-import { WalletAddress } from "../types.ts";
+import { Clearable, WalletAddress } from "../types.ts";
 import {
   OwnershipAlreadyExists,
   UserDoesNotHaveTokens,
@@ -15,7 +15,8 @@ import {
 
 export class TokenOwnership<
   TokenOwnershipT extends TokenOwnershipModel = TokenOwnershipModel
-> {
+> implements Clearable
+{
   private collection: Collection<TokenOwnershipT>;
 
   constructor(
@@ -25,6 +26,10 @@ export class TokenOwnership<
     this.collection = this.database
       .getDb()
       .collection<TokenOwnershipT>(collectionName);
+  }
+
+  async clearCollection(): Promise<void> {
+    await this.collection.deleteMany({});
   }
 
   async transferTokens(

@@ -1,7 +1,5 @@
 import { tokenContractAbi } from "@repo/web3";
 import { type Log, decodeEventLog } from "viem";
-import { ownershipService, tokenService } from "../db/index.ts";
-import { TokenModel } from "@repo/db";
 import {
   TokenCreatedEventArgs,
   tokenCreatedEventHandler,
