@@ -1,5 +1,5 @@
 import { createConfig, http } from "wagmi";
-import { chain } from "./viem.ts";
+import { chain } from "./viem";
 import { metaMask } from "wagmi/connectors";
 
 const MetaMaskOptions = {
@@ -17,18 +17,3 @@ export const wagmiConfig = createConfig({
   connectors: [metaMask(MetaMaskOptions)],
   ssr: true,
 });
-
-type CreateWagmiConfigArgs = {
-  wagmiChain: any;
-};
-
-export function createWagmiConfig({ wagmiChain }: CreateWagmiConfigArgs) {
-  return createConfig({
-    chains: [wagmiChain],
-    transports: {
-      [wagmiChain.id]: http(),
-    },
-    connectors: [metaMask(MetaMaskOptions)],
-    ssr: true,
-  });
-}

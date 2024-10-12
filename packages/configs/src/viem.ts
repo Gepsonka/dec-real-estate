@@ -18,3 +18,34 @@ export const chain = defineChain({
     },
   },
 });
+
+type CreateChainArgs = {
+  chainRpcUrl: string;
+  tokenContractAddress: `0x${string}`;
+  marketplaceContractAddress: `0x${string}`;
+};
+
+export function createChain({
+  chainRpcUrl,
+  tokenContractAddress,
+  marketplaceContractAddress,
+}: CreateChainArgs) {
+  return defineChain({
+    id: 31337,
+    name: "Ethereum",
+    nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+    rpcUrls: {
+      default: {
+        http: [chainRpcUrl as string],
+      },
+    },
+    contracts: {
+      token: {
+        address: tokenContractAddress,
+      },
+      marketplace: {
+        address: marketplaceContractAddress,
+      },
+    },
+  });
+}

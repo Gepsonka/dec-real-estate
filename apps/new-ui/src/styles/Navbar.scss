@@ -2,8 +2,9 @@
 
 
 .navbar {
-  @apply w-max sticky top-0;
-  @apply bg-white;
+  @apply bg-white bg-opacity-30 backdrop-filter backdrop-blur-md w-full sticky top-0 m-0 flex flex-row items-center;
+
+  
 
   h1 {
     @apply text-3xl m-3;
@@ -12,5 +13,14 @@
   .dark & {
     @apply bg-black;
   }
+
+  .metamask-button {
+    @apply ml-auto;
+  }
+
+  .wallet-balance-container {
+    @apply flex space-x-3 items-center ml-auto mr-4
+  }
+
 }
 
