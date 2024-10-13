@@ -5,6 +5,7 @@ import { Navbar } from "@/components/base-layout/navbar";
 import { wagmiConfig } from "@/configs/wagmi";
 import { ThemeProvider } from "@/utils/theme-provider";
 import { Roboto } from "next/font/google";
+import * as axiosConf from "@/configs/axiosConf";
 import "@/styles/globals.scss";
 
 const roboto = Roboto({ subsets: ["latin"], weight: ["400"] });

@@ -33,18 +33,6 @@ const formSchema = z.object({
     },
     { message: "Min amount is 1." }
   ),
-  // pricePerToken: z
-  //   .string()
-  //   .refine(
-  //     (value) => {
-  //       const num = parseFloat(value);
-  //       return !isNaN(num) && isFinite(num) && num > 0;
-  //     },
-  //     {
-  //       message: "Please enter a valid positive number",
-  //     }
-  //   )
-  //   .transform((value) => parseFloat(value)),
 });
 
 export default function CreateToken() {

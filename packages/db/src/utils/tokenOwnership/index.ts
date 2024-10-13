@@ -28,6 +28,14 @@ export class TokenOwnership<
       .collection<TokenOwnershipT>(collectionName);
   }
 
+  async getUserAssets(address: WalletAddress) {
+    const filter = {
+      ownerAddress: address,
+    } as Filter<TokenOwnershipT>;
+
+    return await this.collection.find(filter).toArray();
+  }
+
   async clearCollection(): Promise<void> {
     await this.collection.deleteMany({});
   }

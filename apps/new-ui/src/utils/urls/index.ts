@@ -1,5 +1,5 @@
 export const clientUrlPaths = {
-  createToken: "/create-token",
+  createToken: "/token/create",
   assets: "/assets",
   marketplace: "/marketplace",
   token__id: (id: string) => `/token/${id}`,
