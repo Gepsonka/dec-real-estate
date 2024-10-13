@@ -11,6 +11,6 @@ export const NAV_MENU_ITEMS: NavMenuItem[] = [
   },
   {
     title: "Token Creation",
-    href: "/",
+    href: "/create-token",
   },
 ];
