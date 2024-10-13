@@ -1,0 +1,12 @@
+
+.asset-card-container {
+  @apply p-5 flex  justify-stretch
+}
+
+.asset-card {
+  @apply bg-zinc-900 hover:bg-zinc-800 transition-colors;
+
+  .context-element * {
+    @apply mb-3
+  }
+}

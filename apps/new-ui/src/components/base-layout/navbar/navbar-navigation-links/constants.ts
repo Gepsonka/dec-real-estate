@@ -1,17 +1,21 @@
-import { clientUrlPaths } from "@/utils/urls";
+import { clientUrls } from "@/utils/urls";
 import { NavMenuItem } from "./types";
 
 export const NAV_MENU_ITEMS: NavMenuItem[] = [
   {
     title: "Assets",
-    href: clientUrlPaths.assets,
+    href: clientUrls.assets,
   },
   {
     title: "Marketplace",
-    href: clientUrlPaths.marketplace,
+    href: clientUrls.marketplace,
   },
   {
     title: "Token Creation",
-    href: clientUrlPaths.createToken,
+    href: clientUrls.createToken,
+  },
+  {
+    title: "Listing Creation",
+    href: clientUrls.createListing,
   },
 ];

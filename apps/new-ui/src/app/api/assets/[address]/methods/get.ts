@@ -9,6 +9,8 @@ export async function get(
   request: Request,
   { params }: { params: ParamsType }
 ) {
-  const assets = await ownershipCollection.getUserAssets(params.address);
+  const assets = await ownershipCollection.getUserAssetsWithTokens(
+    params.address
+  );
   return Response.json(assets);
 }

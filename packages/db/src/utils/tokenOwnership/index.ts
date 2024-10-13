@@ -5,7 +5,7 @@ import {
   UpdateFilter,
 } from "mongodb";
 import { MongoDatabase } from "../database/index.ts";
-import { TokenOwnershipModel } from "./types.ts";
+import { OwnershipWithTokenModel, TokenOwnershipModel } from "./types.ts";
 import { Clearable, WalletAddress } from "../types.ts";
 import {
   OwnershipAlreadyExists,
@@ -26,6 +26,34 @@ export class TokenOwnership<
     this.collection = this.database
       .getDb()
       .collection<TokenOwnershipT>(collectionName);
+  }
+
+  async getUserAssetsWithTokens(
+    address: WalletAddress
+  ): Promise<OwnershipWithTokenModel[]> {
+    return (await this.collection
+      .aggregate([
+        {
+          $match: {
+            ownerAddress: address,
+          },
+        },
+        {
+          $lookup: {
+            from: "Token",
+            localField: "tokenId",
+            foreignField: "tokenId",
+            as: "token",
+          },
+        },
+        {
+          $unwind: {
+            path: "$token",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+      ])
+      .toArray()) as OwnershipWithTokenModel[];
   }
 
   async getUserAssets(address: WalletAddress) {

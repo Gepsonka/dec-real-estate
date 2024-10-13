@@ -1,9 +1,26 @@
-import { useAccount } from "wagmi";
+import { serverUrls } from "@/utils/urls";
+import {
+  OwnershipWithTokenModel,
+  TokenOwnershipModel,
+  WalletAddress,
+} from "@repo/db";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { WithId } from "mongodb";
 
-export function useAssets() {
-  const { address, isConnected } = useAccount();
+async function fetchAssets(
+  address: WalletAddress
+): Promise<OwnershipWithTokenModel[]> {
+  const res = await axios.get(serverUrls.assets(address));
 
-  if (!isConnected) {
-    return { asstes: null, error: true };
-  }
+  return res.data;
 }
+
+export const useAssets = (address: WalletAddress | undefined) => {
+  return useQuery({
+    queryKey: ["userAssets", address],
+    queryFn: () => fetchAssets(address!),
+    staleTime: 5000,
+    enabled: !!address,
+  });
+};
