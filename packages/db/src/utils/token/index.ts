@@ -3,10 +3,13 @@ import {
   MongoClient,
   Document,
   OptionalUnlessRequiredId,
+  WithId,
+  Filter,
 } from "mongodb";
 import { MongoDatabase } from "../database/index.ts";
 import { TokenModel } from "./types.ts";
 import { Clearable } from "../types.ts";
+import { TokenNotExists } from "./errors.ts";
 
 export class Token<TokenModelT extends TokenModel = TokenModel>
   implements Clearable
@@ -25,6 +28,21 @@ export class Token<TokenModelT extends TokenModel = TokenModel>
     await this.collection.deleteMany({});
   }
 
+  async getTokenById(tokenId: string): Promise<WithId<TokenModelT>> {
+    const filter = {
+      tokenId: tokenId,
+    } as Filter<TokenModelT>;
+
+    const res = await this.collection.findOne(filter);
+    if (!res) {
+      throw new TokenNotExists("Token with the given id does not exits", {
+        tokenId,
+      });
+    }
+
+    return res;
+  }
+
   async createToken(token: TokenModelT) {
     const doc = {
       ...token,
@@ -34,3 +52,4 @@ export class Token<TokenModelT extends TokenModel = TokenModel>
 }
 
 export * from "./types.ts";
+export * from "./errors.ts";

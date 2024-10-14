@@ -89,4 +89,14 @@ contract ERC1155Marketplace is ERC1155Holder {
         // require(listing.active, "Listing is not active");
         return listing;
     }
+
+    function getAllActiveListings() external view returns (Listing[] memory) {
+        Listing[] memory newListings = new Listing[](listingCounter);
+        uint256 index = 0;
+        for (uint256 i = 0; i < listingCounter; i++) {
+            newListings[index] = listings[i];
+            index++;
+        }
+        return newListings;
+    }
 }
