@@ -1,4 +1,4 @@
-import { MongoDatabase, Token, TokenOwnership } from "@repo/db";
+import { Listing, MongoDatabase, Token, TokenOwnership } from "@repo/db";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -11,3 +11,5 @@ export const db = new MongoDatabase(
 export const tokenService = new Token(db);
 
 export const ownershipService = new TokenOwnership(db);
+
+export const listingService = new Listing(db);

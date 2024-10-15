@@ -1,7 +1,7 @@
 import { Listing, TokenPurchasedEventArgs } from "./types.ts";
 import { viemPublicClient } from "../../viemClient.ts";
 import { tokenMarketplaceAbi } from "@repo/web3";
-import { ownershipService } from "../../../db/index.ts";
+import { listingService, ownershipService } from "../../../db/index.ts";
 
 export async function tokenPurchasedEventHandler(
   args: TokenPurchasedEventArgs
@@ -21,6 +21,8 @@ export async function tokenPurchasedEventHandler(
     args.buyer,
     args.amount
   );
+
+  await listingService.purchaseFromListing(args.listingId, args.amount);
 }
 
 export * from "./types.ts";

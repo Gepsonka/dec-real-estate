@@ -1,6 +1,5 @@
-import { Listing } from "@/utils/marketplace";
-import { WalletAddress } from "@repo/db";
+import { Listing, ListingModel, WalletAddress } from "@repo/db";
 
 export interface ListingCardProps {
-  listing: Listing;
+  listing: ListingModel;
 }

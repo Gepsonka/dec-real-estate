@@ -4,6 +4,10 @@ import {
   TokenPurchasedEventArgs,
   tokenPurchasedEventHandler,
 } from "./eventHandlers/tokenPurchasedEventHandler/index.ts";
+import {
+  ListingCreatedEventArgs,
+  listingCreatedEventHandler,
+} from "./eventHandlers/listingCreatedEventHandler/index.ts";
 
 export function onLogsMarketplaceContract(logs: Log[]) {
   console.log("Marketplace on logs...");
@@ -20,9 +24,14 @@ export function onLogsMarketplaceContract(logs: Log[]) {
   });
 
   decodedEventLogs.forEach(async (decodedLog) => {
-    const args: TokenPurchasedEventArgs =
-      decodedLog.args as unknown as TokenPurchasedEventArgs;
-    if (decodedLog.eventName === "TokensPurchased")
+    if (decodedLog.eventName === "TokensPurchased") {
+      const args: TokenPurchasedEventArgs =
+        decodedLog.args as unknown as TokenPurchasedEventArgs;
       await tokenPurchasedEventHandler(args);
+    } else if (decodedLog.eventName === "ListingCreated") {
+      const args: ListingCreatedEventArgs =
+        decodedLog.args as unknown as ListingCreatedEventArgs;
+      listingCreatedEventHandler(args);
+    }
   });
 }

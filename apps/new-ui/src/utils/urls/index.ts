@@ -11,4 +11,5 @@ export const clientUrls = {
 export const serverUrls = {
   assets: (address: WalletAddress) => `/api/assets/${address}`,
   token__id: (tokenId: string) => `/api/token/${tokenId}`,
+  listings: "/api/listing",
 };

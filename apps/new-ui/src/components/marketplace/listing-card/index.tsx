@@ -50,13 +50,16 @@ export function ListingCard(props: ListingCardProps) {
       <CardContent>
         <p>seller: {props.listing.seller}</p>
         <p>amount remaining: {props.listing.amount}</p>
-        <p>Price per token: {formatEther(props.listing.pricePerToken)} ETH</p>
+        <p>
+          Price per token: {formatEther(BigInt(props.listing.pricePerToken))}{" "}
+          ETH
+        </p>
       </CardContent>
       <CardFooter>
         <TokenBuyPopover
           triggerComponent={<Button variant={"outline"}>Buy</Button>}
           amount={Number(props.listing.amount)}
-          pricePerToken={props.listing.pricePerToken}
+          pricePerToken={BigInt(props.listing.pricePerToken)}
         />
       </CardFooter>
     </Card>

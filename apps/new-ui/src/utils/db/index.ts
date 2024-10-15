@@ -1,4 +1,4 @@
-import { MongoDatabase, Token, TokenOwnership } from "@repo/db";
+import { Listing, MongoDatabase, Token, TokenOwnership } from "@repo/db";
 
 const db = new MongoDatabase(
   process.env.MONGO_URI as string,
@@ -7,3 +7,4 @@ const db = new MongoDatabase(
 
 export const tokenCollection = new Token(db);
 export const ownershipCollection = new TokenOwnership(db);
+export const listingService = new Listing(db);
