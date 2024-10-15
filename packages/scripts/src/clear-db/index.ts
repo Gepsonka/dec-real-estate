@@ -1,5 +1,5 @@
 import * as dotenv from "dotenv";
-import { MongoDatabase, Token, TokenOwnership } from "@repo/db";
+import { Listing, MongoDatabase, Token, TokenOwnership } from "@repo/db";
 
 dotenv.config();
 
@@ -18,7 +18,13 @@ async function clearOwnership() {
   await ownershipService.clearCollection();
 }
 
+async function clearListing() {
+  const listingService = new Listing(mongoDb);
+  await listingService.clearCollection();
+}
+
 export async function clearDb() {
   await clearToken();
   await clearOwnership();
+  await clearListing();
 }

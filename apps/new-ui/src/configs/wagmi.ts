@@ -1,6 +1,7 @@
 import { createConfig, http } from "wagmi";
 import { chain } from "./viem";
 import { metaMask } from "wagmi/connectors";
+import { hardhat } from "viem/chains";
 
 const MetaMaskOptions = {
   dappMetadata: {
@@ -10,9 +11,9 @@ const MetaMaskOptions = {
 };
 
 export const wagmiConfig = createConfig({
-  chains: [chain],
+  chains: [hardhat],
   transports: {
-    [chain.id]: http(),
+    [hardhat.id]: http(),
   },
   connectors: [metaMask(MetaMaskOptions)],
   ssr: true,

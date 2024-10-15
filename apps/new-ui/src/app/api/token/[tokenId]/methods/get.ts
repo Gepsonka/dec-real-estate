@@ -12,10 +12,14 @@ export async function get(
 ) {
   try {
     const token = await tokenCollection.getTokenById(params.tokenId);
-    return token;
+    return NextResponse.json(token);
   } catch (err) {
     if (err instanceof TokenNotExists) {
       return NextResponse.json({ error: err.message }, { status: 404 });
     }
+
+    console.log(err);
+
+    return NextResponse.error();
   }
 }

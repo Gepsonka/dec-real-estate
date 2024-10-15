@@ -37,7 +37,7 @@ export default function Assets() {
   }
 
   return (
-    <div className="asset-card-container">
+    <div className="asset-card-container space-x-6">
       {renderAssetCards(assetsQuery.data!)}
     </div>
   );

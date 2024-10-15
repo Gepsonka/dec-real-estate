@@ -57,6 +57,7 @@ export function ListingCard(props: ListingCardProps) {
       </CardContent>
       <CardFooter>
         <TokenBuyPopover
+          listingId={BigInt(props.listing.listingId)}
           triggerComponent={<Button variant={"outline"}>Buy</Button>}
           amount={Number(props.listing.amount)}
           pricePerToken={BigInt(props.listing.pricePerToken)}

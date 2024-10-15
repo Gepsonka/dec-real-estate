@@ -33,16 +33,18 @@ export class Listing<ListingModelT extends ListingModel = ListingModel>
 
   async purchaseFromListing(listingId: bigint, amountOfTokens: bigint) {
     const filter = {
-      listingId,
+      listingId: listingId.toString(),
     } as Filter<ListingModelT>;
 
     const currentListing = await this.collection.findOne(filter);
 
-    const newAmount = currentListing?.amount - amountOfTokens;
+    const newAmount = BigInt(currentListing?.amount) - amountOfTokens;
 
     if (newAmount > 0) {
       const update = {
-        amount: currentListing?.amount - amountOfTokens,
+        $set: {
+          amount: newAmount.toString(),
+        },
       } as UpdateFilter<ListingModelT>;
 
       await this.collection.updateOne(filter, update);
@@ -52,7 +54,7 @@ export class Listing<ListingModelT extends ListingModel = ListingModel>
   }
 
   async getAllListings() {
-    return await this.collection.find();
+    return await this.collection.find({}).toArray();
   }
 }
 
