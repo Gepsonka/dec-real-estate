@@ -11,9 +11,9 @@ const MetaMaskOptions = {
 };
 
 export const wagmiConfig = createConfig({
-  chains: [hardhat],
+  chains: [chain],
   transports: {
-    [hardhat.id]: http(),
+    [chain.id]: http(),
   },
   connectors: [metaMask(MetaMaskOptions)],
   ssr: true,
