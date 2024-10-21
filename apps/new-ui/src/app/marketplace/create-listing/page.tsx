@@ -82,6 +82,7 @@ export default function CreateListing() {
   });
 
   const onSubmit = (data: z.infer<typeof CreateListingFormSchema>) => {
+    console.log(data);
     writeContract({
       address: process.env
         .NEXT_PUBLIC_MARKETPLACE_CONTRACT_ADDRESS as WalletAddress,

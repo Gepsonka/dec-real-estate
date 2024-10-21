@@ -165,7 +165,7 @@ export class TokenOwnership<
 
       const filter = {
         ownerAddress: user,
-        tokenId,
+        tokenId: tokenId.toString(),
       } as Filter<TokenOwnershipT>;
 
       const doc = {
@@ -173,7 +173,7 @@ export class TokenOwnership<
       } as UpdateFilter<TokenOwnershipT>;
 
       const updatedOwnership = await this.collection.updateOne(filter, doc);
-
+      console.log("updated owner: ", updatedOwnership);
       return updatedOwnership;
     }
   }

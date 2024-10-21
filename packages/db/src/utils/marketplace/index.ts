@@ -38,6 +38,10 @@ export class Listing<ListingModelT extends ListingModel = ListingModel>
 
     const currentListing = await this.collection.findOne(filter);
 
+    if (!currentListing) {
+      return;
+    }
+
     const newAmount = BigInt(currentListing?.amount) - amountOfTokens;
 
     if (newAmount > 0) {

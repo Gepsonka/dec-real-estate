@@ -15,7 +15,7 @@ export async function tokenPurchasedEventHandler(
 
   console.log("Listing: ", listing);
 
-  console.log();
+  console.log("args: ", args);
 
   await ownershipService.transferTokens(
     listing.tokenId,

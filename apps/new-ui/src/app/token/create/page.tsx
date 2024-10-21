@@ -68,52 +68,56 @@ export default function CreateToken() {
   };
 
   return (
-    <div className="w-[50%]">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            control={form.control}
-            name="tokenName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Token Name</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Textarea {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="amount"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Number of tokens</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <div className="w-[100%] flex justify-center p-4">
+      <div className="flex w-[50%]">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="w-[100%]">
+            <FormField
+              control={form.control}
+              name="tokenName"
+              render={({ field }) => (
+                <FormItem className="mb-5">
+                  <FormLabel>Token Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem className="mb-5">
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="amount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Number of tokens</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <Button type="submit">Create Token</Button>
-        </form>
-      </Form>
+            <Button className="my-4" type="submit">
+              Create Token
+            </Button>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 }
