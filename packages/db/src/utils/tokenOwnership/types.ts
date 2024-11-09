@@ -6,6 +6,7 @@ export interface TokenOwnershipModel extends Document {
   tokenId: string;
   ownerAddress: WalletAddress;
   amount: string;
+  burned: boolean;
 }
 
 export interface OwnershipWithTokenModel extends WithId<TokenOwnershipModel> {

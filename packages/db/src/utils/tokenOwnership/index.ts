@@ -90,6 +90,7 @@ export class TokenOwnership<
         tokenId: tokenId.toString(),
         ownerAddress: owner,
         amount: amount.toString(),
+        burned: false,
       } as OptionalUnlessRequiredId<TokenOwnershipT>;
       const result = await this.collection.insertOne(doc);
     }
@@ -190,6 +191,20 @@ export class TokenOwnership<
     const deletedOwnership = await this.collection.deleteOne(filter);
 
     return deletedOwnership;
+  }
+
+  async burnToken(owner: WalletAddress, tokenId: bigint) {
+    const filter = {
+      ownerAddress: owner,
+      tokenId: tokenId.toString(),
+    } as Filter<TokenOwnershipT>;
+
+    const update = {
+      $set: { burned: true },
+    } as UpdateFilter<TokenOwnershipT>;
+
+    const updatedOwnershipRes = await this.collection.updateOne(filter, update);
+    return updatedOwnershipRes;
   }
 }
 

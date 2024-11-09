@@ -7,4 +7,5 @@ export interface AssetCardProps {
   totalAmount: bigint; // total amount of the token type
   tokenId: bigint;
   tokenCreator: WalletAddress;
+  burned?: boolean;
 }
