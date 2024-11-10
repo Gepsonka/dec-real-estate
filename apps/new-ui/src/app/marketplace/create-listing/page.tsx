@@ -121,14 +121,17 @@ export default function CreateListing() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {assetsQuery.data.map((asset) => (
-                        <SelectItem
-                          key={asset.tokenId.toString()}
-                          value={asset.tokenId.toString()}
-                        >
-                          {asset.token.data.tokenName}
-                        </SelectItem>
-                      ))}
+                      {assetsQuery.data.map((asset) => {
+                        if (!asset.burned)
+                          return (
+                            <SelectItem
+                              key={asset.tokenId.toString()}
+                              value={asset.tokenId.toString()}
+                            >
+                              {asset.token.data.tokenName}
+                            </SelectItem>
+                          );
+                      })}
                     </SelectContent>
                   </Select>
                   <FormMessage />

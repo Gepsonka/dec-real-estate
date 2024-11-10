@@ -24,6 +24,7 @@ export default function Assets() {
         totalAmount={BigInt(asset.token.amount)}
         tokenId={BigInt(asset.tokenId)}
         tokenCreator={asset.token.creatorAddress}
+        burned={asset.burned}
       />
     ));
   };

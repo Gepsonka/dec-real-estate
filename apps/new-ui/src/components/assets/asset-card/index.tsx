@@ -29,6 +29,40 @@ export function AssetCard(props: AssetCardProps) {
     return props.amountOwned == props.totalAmount;
   };
 
+  const burnToken = () => {
+    writeContract({
+      abi: tokenContractAbi,
+      address: process.env.NEXT_PUBLIC_TOKEN_CONTRACT_ADDRESS as `0x${string}`,
+      functionName: "burnToken",
+      args: [props.tokenId],
+    });
+  };
+
+  const renderBurnState = () => {
+    if (props.burned) {
+      return <span className="text-center">burned</span>;
+    }
+    if (allTokensInPosession()) {
+      return (
+        <div className="flex my-3">
+          <Button
+            onClick={() => {
+              // console.log("burn");
+              // console.log(
+              //   "contract address: ",
+              //   process.env.NEXT_PUBLIC_TOKEN_CONTRACT_ADDRESS as `0x${string}`
+              // );
+
+              burnToken();
+            }}
+          >
+            Burn
+          </Button>
+        </div>
+      );
+    }
+  };
+
   return (
     <Card className="asset-card">
       <CardHeader>
@@ -45,23 +79,7 @@ export function AssetCard(props: AssetCardProps) {
             Number(props.totalAmount)
           )}
         />
-        {allTokensInPosession() && (
-          <div className="my-3">
-            <Button
-              onClick={() =>
-                writeContract({
-                  abi: tokenContractAbi,
-                  address: process.env
-                    .NEXT_PUBLIC_TOKEN_CONTRACT_ADDRESS as `0x${string}`,
-                  functionName: "burnToken",
-                  args: [account.address, props.tokenId],
-                })
-              }
-            >
-              Burn
-            </Button>
-          </div>
-        )}
+        {renderBurnState()}
       </CardContent>
     </Card>
   );
